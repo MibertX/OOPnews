@@ -15,6 +15,6 @@
 </head>
 
 <body>
-	<?php include __DIR__ . DS . 'news' . DS . $this->file . '.php'?>
+	<?php include $this->file ?>
 </body>
 </html>

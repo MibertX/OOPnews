@@ -6,22 +6,23 @@
  * Date: 04.07.2016
  * Time: 19:05
  */
-class AbstractModel
+
+class AdminModel
 {
 	protected static $table;
 	protected static $class;
 
-	public static function actionGetAll()
+	public static function getAll()
 	{
 		$db = new DB();
 		$sql = 'SELECT * FROM ' . static::$table;
 		return $db->queryAll($sql, static::$class);
 	}
 
-	public static function actionGetOne($id)
+	public static function getOne($id)
 	{
 		$db = new DB();
-		$sql = 'SELECT * FROM ' . static::$table . 'WHERE id=' . $id;
+		$sql = 'SELECT * FROM ' . static::$table . ' WHERE id=' . $id;
 		return $db->queryOne($sql, static::$class);
 	}
 }

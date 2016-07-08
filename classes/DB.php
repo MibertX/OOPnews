@@ -21,6 +21,7 @@ class DB
 		}
 	}
 
+
     // Make a request to database and get a result as an array of objects or (bool)false
 	public function queryAll($sql, $class='stdClass')
 	{
@@ -35,11 +36,13 @@ class DB
 		return $items;
 	}
 
+
 	// Get only one object by id
 	public function queryOne($sql, $class='stdClass')
 	{
 		return $this->queryAll($sql, $class)[0];
 	}
+
 
 	// Just make a request and return a boolean result(for INSERT and DELETE requests)
 	public function exec($sql)
@@ -47,5 +50,3 @@ class DB
 		return $res = mysql_query($sql);
 	}
 }
-
-$test = new DB('news_feed');

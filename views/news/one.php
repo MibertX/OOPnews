@@ -8,5 +8,9 @@
 ?>
 
 <h2>
-
+    <?php echo $one_news->title ?>
 </h2>
+
+<p>
+	<?php echo $one_news->text ?>
+</p>
