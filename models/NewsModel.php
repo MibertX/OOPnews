@@ -6,15 +6,16 @@
  * Date: 04.07.2016
  * Time: 19:02
  */
+
 class NewsModel extends AdminModel
 {
 	protected static $table = 'news';
 	protected static $class = 'NewsModel';
 
-	public $source;
-	public $text;
-	public $date;
-	public $title;
+//	public $source;
+//	public $text;
+//	public $date;
+//	public $title;
 
 	//inserting data into DB
 	public static function insertOne($array_data)

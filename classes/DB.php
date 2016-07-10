@@ -8,45 +8,38 @@
  */
 class DB
 {
-	//connecting to database, all data can be set by constructor
-	public function __construct($database='news_feed', $host='localhost', $login='root', $pass='')
+	protected $dbn;
+	protected $className = 'stdClass';
+
+
+	//connecting to database
+	public function __construct()
 	{
-		$link = mysql_connect($host, $login, $pass);
-		if (!$link) {
-			die('ERROR: cannot connect to database');
-		}
-		$selected_db = mysql_select_db($database);
-		if (!$selected_db) {
-			die('ERROR: selected database does not exists');
-		}
+		$dsn = 'mysql:dbname=news_feed; host=localhost';
+		$this->dbn = new PDO($dsn, 'root', '');
 	}
 
 
-    // Make a request to database and get a result as an array of objects or (bool)false
-	public function queryAll($sql, $class='stdClass')
+	//setting a className that called method of this class
+	public function setClassName($className)
 	{
-		$res = mysql_query($sql);
-		if(false === $res) {
-			return false;
-		}
-		$items=[];
-		while ($item = mysql_fetch_object($res, $class)) {
-			$items[] = $item;
-		}
-		return $items;
+		$this->className = $className;
 	}
 
 
-	// Get only one object by id
-	public function queryOne($sql, $class='stdClass')
+	//prepare a sql query, make it, and than return a result(objects or false)
+	public function query($sql, $params = [])
 	{
-		return $this->queryAll($sql, $class)[0];
+		$sth = $this->dbn->prepare($sql);
+		$sth->execute($params);
+		return $sth->fetchAll(PDO::FETCH_CLASS, $this->className);
 	}
 
 
-	// Just make a request and return a boolean result(for INSERT and DELETE requests)
-	public function exec($sql)
+	//prepare a sql query, and just return a boolean result of making it (true or false)
+	public function exec($sql, $params = [])
 	{
-		return $res = mysql_query($sql);
+		$sth = $this->dbn->prepare($sql);
+		return $sth->execute($params);
 	}
 }
