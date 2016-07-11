@@ -75,9 +75,11 @@ class NewsController
 		$news = new NewsModel();
 		$news->update($id, $updates);
 
-		$view = new Views();
-		$view->news = NewsModel::findAll();
-		$view->display('news/all.php');
+		echo 'true';
+
+//		$view = new Views();
+//		$view->news = NewsModel::findAll();
+//		$view->display('news/all.php');
 	}
 
 
@@ -89,8 +91,10 @@ class NewsController
 		$news = new NewsModel();
 		$news->delete($id);
 
-		$view = new Views();
-		$view->news = NewsModel::findAll();
-		$view->display('news/all.php');
+		echo 'true';
+
+//		$view = new Views();
+//		$view->news = NewsModel::findAll();
+//		$view->display('news/all.php');
 	}
 }
