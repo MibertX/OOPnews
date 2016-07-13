@@ -53,7 +53,7 @@ class NewsController
 
 
 	//insert new article into
-	public function actionInsert()
+	private function actionInsert()
 	{
 		$article = new NewsModel();
 		$article->title = 'PDO title';
@@ -69,9 +69,6 @@ class NewsController
 		else {
 			$_SESSION['message'] = 'Inserting was success';
 		}
-
-		$view = new Views();
-		$view->display('news/message.php');
 	}
 
 
@@ -93,14 +90,11 @@ class NewsController
 		else {
 			$_SESSION['message'] = 'Updating was success';
 		}
-
-		$view = new Views();
-		$view->display('news/message.php');
 	}
 
 
 	//delete the news
-	private function actionDelete()
+	public function actionDelete()
 	{
 		$news = new NewsModel();
 		$news->id = $_GET['id'];
@@ -133,19 +127,32 @@ class NewsController
 
 	public function actionSave()
 	{
-		if (isset($_POST) && !empty($_POST)) {
-			$news = new NewsController();
+		$news = new NewsController();
+
+		if (isset($_GET['id'])) {
 			$news->actionUpdate();
 		}
-		elseif (!isset($_POST) || empty($_POST)) {
-			$news = new NewsController();
-			$news->actionDelete();
-		}
 		else {
-			session_start();
-			$_SESSION['message'] = 'Wrong operation';
-			$view = new Views();
-			$view->display('news/message.php');
+			$news->actionInsert();
 		}
+
+		$view = new Views();
+		$view->display('news/message.php');
+
+
+//		if (isset($_POST) && !empty($_POST)) {
+//			$news = new NewsController();
+//			$news->actionUpdate();
+//		}
+//		elseif (!isset($_POST) || empty($_POST)) {
+//			$news = new NewsController();
+//			$news->actionDelete();
+//		}
+//		else {
+//			session_start();
+//			$_SESSION['message'] = 'Wrong operation';
+//			$view = new Views();
+//			$view->display('news/message.php');
+//		}
 	}
 }
