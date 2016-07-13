@@ -6,6 +6,8 @@
  * Time: 21:59
  */
 
+include __DIR__ . DS . 'add.php';
+
 foreach ($news as $article) : ?>
 	<h2>
 		<a href="../../index.php?ctrl=News&action=One&id=<?php echo $article->id ?>"> <?php echo $article->title ?> </a>

@@ -56,8 +56,8 @@ class NewsController
 	private function actionInsert()
 	{
 		$article = new NewsModel();
-		$article->title = 'PDO title';
-		$article->text = 'PDO text';
+		$article->title = $_POST['title'];
+		$article->text = $_POST['text'];
 		$article->source = 'PDO Mibert';    //will be update when reg. and auth. will be working
 		$article->date = date('Y.m.d.');
 		$result = $article->insert();
@@ -125,6 +125,7 @@ class NewsController
 	}
 
 
+	//public method that decide - is a news a new one - and insert it, or a news is exist - so only update it
 	public function actionSave()
 	{
 		$news = new NewsController();
@@ -138,21 +139,5 @@ class NewsController
 
 		$view = new Views();
 		$view->display('news/message.php');
-
-
-//		if (isset($_POST) && !empty($_POST)) {
-//			$news = new NewsController();
-//			$news->actionUpdate();
-//		}
-//		elseif (!isset($_POST) || empty($_POST)) {
-//			$news = new NewsController();
-//			$news->actionDelete();
-//		}
-//		else {
-//			session_start();
-//			$_SESSION['message'] = 'Wrong operation';
-//			$view = new Views();
-//			$view->display('news/message.php');
-//		}
 	}
 }

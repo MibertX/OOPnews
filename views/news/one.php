@@ -11,7 +11,7 @@
     <?php echo $one_news->title ?>
 </h2>
 
-<a href=""> Edit </a>
+<a href="/index.php?ctrl=news&action=edit&id=<?php echo $one_news->id ?>"> Edit </a>
 
 <p>
 	<?php echo $one_news->text ?>
