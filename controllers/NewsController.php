@@ -13,8 +13,8 @@ class NewsController
     public function actionAll()
 	{
 		$view = new Views();
-		$view->news = NewsModel::findAll();
-		$view->display('news/all.php');
+		$view->news = NewsModel::findAll();    //get an array of objects-news
+		$view->display('news/all.php');        //and display them
 	}
 
 
@@ -58,7 +58,7 @@ class NewsController
 		$article = new NewsModel();
 		$article->title = 'PDO title';
 		$article->text = 'PDO text';
-		$article->source = 'PDO Mibert';
+		$article->source = 'PDO Mibert';    //will be update when reg. and auth. will be working
 		$article->date = date('Y.m.d.');
 		$result = $article->insert();
 
@@ -78,15 +78,13 @@ class NewsController
 	//update the news
 	private function actionUpdate()
 	{
-		$id = $_GET['id'];
-
-		$updates=[];
-		$updates['title'] = $_POST['title'];
-		$updates['text'] = $_POST['text'];
-		$updates['date'] = date('Ymd');
-
 		$news = new NewsModel();
-		$result = $news->update($id, $updates);
+		$news->id = $_GET['id'];
+		$news->title = $_POST['title'];
+		$news->text = $_POST['text'];
+		$news->date = date('Ymd');
+
+		$result = $news->update();
 
 		session_start();
 		if ($result === false) {
@@ -104,10 +102,10 @@ class NewsController
 	//delete the news
 	private function actionDelete()
 	{
-		$id = $_GET['id'];
-
 		$news = new NewsModel();
-		$result = $news->delete($id);
+		$news->id = $_GET['id'];
+
+		$result = $news->delete();
 
 		session_start();
 		if ($result === false) {
@@ -131,7 +129,8 @@ class NewsController
 		$view->one_news = NewsModel::findOneByPk($id);
 		$view->display('news/edit.php');
 	}
-	
+
+
 	public function actionSave()
 	{
 		if (isset($_POST) && !empty($_POST)) {

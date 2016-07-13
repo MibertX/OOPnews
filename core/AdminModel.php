@@ -33,7 +33,7 @@ abstract class AdminModel
 		$db = new DB();
 		$db->setClassName(get_called_class());
 
-		return $db->query($sql);
+		return $db->query($sql);    //returning an array of object or false
 	}
 
 
@@ -45,7 +45,7 @@ abstract class AdminModel
 		$db = new DB();
 		$db->setClassName(get_called_class());
 
-		return $db->query($sql, [':id' => $id])[0];    // returning only first element of the array
+		return $db->query($sql, [':id' => $id])[0];    //returning only first element of the array
 	}
 
 
@@ -86,25 +86,28 @@ abstract class AdminModel
 
 
 	//updating the element
-	public function update($id, $updates)
+	public function update()
 	{
-		$current_news = static::findOneByPk($id);    //get the element that need to be updated
+		$current_news = static::findOneByPk($this->id);    //get the element that need to be updated
 
 		$params = [];    //array with parameters for making sql query
-		$params[':id'] = $id;
+		$params[':id'] = $this->id;
 		$ins=[];    //array for inserts in sql query while preparing
-		$updates_keys = array_keys($updates);
-
+		$updates_keys = array_keys($this->data);
+		
+		//compare current news with updated
 		foreach($updates_keys as $property) {
-			if ($current_news->data[$property] == $updates[$property]) {    //no need to resave the same data
+			$property = trim($property);    //delete from both sides all spaces and tabulations
+			
+			if ($current_news->data[$property] == $this->data[$property]) {    //no need to resave the same data
 				continue;
 			}
-			elseif (empty($updates[$property])) {    //don't save an empty property
+			elseif (empty($this->data[$property])) {    //don't save an empty property
 				continue;
 			}
 				
-			$params[':' . $property] = $updates[$property];
-			$ins[] = $property . " =:" . $property;
+			$params[':' . $property] = $this->data[$property];
+			$ins[] = $property . ' =:' . $property;
 		}
 
 		if (!isset($ins) or empty($ins)) {    //if true - there is no need in sql query
@@ -122,12 +125,12 @@ abstract class AdminModel
 
 
 	//delete the element
-	public function delete($id)
+	public function delete()
 	{
 		$sql = ' DELETE FROM ' . static::$table . ' WHERE id=:id';
 
 		$db = new DB;
 		$db->setClassName(get_called_class());
-		return $db->exec($sql, [':id'=>$id]);
+		return $db->exec($sql, [':id'=>$this->id]);
 	}
 }

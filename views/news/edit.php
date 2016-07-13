@@ -13,7 +13,7 @@
 	</label>
 
 	<label>
-		<textarea name="text" id="text" > <?php echo $one_news->text ?> </textarea>
+		<textarea name="text" id="text" ><?php echo $one_news->text ?></textarea>
 	</label>
 
 	<input type="submit">
