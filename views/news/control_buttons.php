@@ -7,8 +7,8 @@
  */
 ?>
 
-<a href="http://oopnews/index.php?ctrl=News&action=Delete&id=<?php echo $article->id ?>">Delete</a>&nbsp &nbsp
-<a href="http://oopnews/index.php?ctrl=News&action=Update&id=<?php echo $article->id ?>">Update</a>
+<a href="http://oopnews/index.php?ctrl=News&action=Save&id=<?php echo $article->id ?>"> Delete </a>&nbsp &nbsp
+<a href="http://oopnews/index.php?ctrl=News&action=Edit&id=<?php echo $article->id ?>"> Edit </a>
 
 <!--<input type="button" name="update" id="update" value="Update"-->
 <!--	   formaction="http://oopnews/index.php?ctrl=News&action=update&id=--><?php //echo $article->id ?><!--">-->

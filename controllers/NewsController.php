@@ -15,7 +15,7 @@ class NewsController
 		$view = new Views();
 		$view->news = NewsModel::findAll();
 		$view->display('news/all.php');
-}
+	}
 
 
 	//display one news got by id from DB
@@ -29,19 +29,26 @@ class NewsController
 
 
 	//display one news got by column from DB
-	public function actionAllByColumn()
+	public function actionOneByColumn()
 	{
 		//without view now, its for search
 		//$id = $_GET['id'];
 
-		$field = 'source';
-		$value = 'Mibert';
+		$field = 'source';    //_GET
+		$value = 'Mibert';    //_GET
 		$article = new NewsModel();
-		$article->findByColumn($field, $value);
+		$result = $article->findByColumn($field, $value);
 
-		//$view = new Views();
-		//$view->one_news = NewsModel::findOneByPk($id);
-		//$view->display('news/one.php');
+		$view = new Views();
+		if ($result === true) {
+			$view->one_news = $result;
+			$view->display('news/one.php');
+		}
+		else {
+			session_start();
+			$_SESSION['message'] = 'No search result';
+			$view->display('news/message.php');
+		}
 	}
 
 
@@ -53,48 +60,93 @@ class NewsController
 		$article->text = 'PDO text';
 		$article->source = 'PDO Mibert';
 		$article->date = date('Y.m.d.');
-		$article->insert();
+		$result = $article->insert();
 
-		//message
+		session_start();
+		if ($result === false) {
+			$_SESSION['message'] = 'Cannot insert the news';
+		}
+		else {
+			$_SESSION['message'] = 'Inserting was success';
+		}
+
 		$view = new Views();
-		$view->news = NewsModel::findAll();
-		$view->display('news/all.php');
+		$view->display('news/message.php');
 	}
 
 
 	//update the news
-	public function actionUpdate()
+	private function actionUpdate()
 	{
 		$id = $_GET['id'];
 
 		$updates=[];
-		$updates['title'] = 'Updated title 3';
-		$updates['text'] = 'Updated text 2';
-		$updates['date'] = 'Updated date 2';
+		$updates['title'] = $_POST['title'];
+		$updates['text'] = $_POST['text'];
+		$updates['date'] = date('Ymd');
 
 		$news = new NewsModel();
-		$news->update($id, $updates);
+		$result = $news->update($id, $updates);
 
-		echo 'true';
+		session_start();
+		if ($result === false) {
+			$_SESSION['message'] = 'Cannot update the news';
+		}
+		else {
+			$_SESSION['message'] = 'Updating was success';
+		}
 
-//		$view = new Views();
-//		$view->news = NewsModel::findAll();
-//		$view->display('news/all.php');
+		$view = new Views();
+		$view->display('news/message.php');
 	}
 
 
 	//delete the news
-	public function actionDelete()
+	private function actionDelete()
 	{
 		$id = $_GET['id'];
 
 		$news = new NewsModel();
-		$news->delete($id);
+		$result = $news->delete($id);
 
-		echo 'true';
+		session_start();
+		if ($result === false) {
+			$_SESSION['message'] = 'Cannot delete the news';
+		}
+		else {
+			$_SESSION['message'] = 'Deleting was success';
+		}
 
-//		$view = new Views();
-//		$view->news = NewsModel::findAll();
-//		$view->display('news/all.php');
+		$view = new Views();
+		$view->display('news/message.php');
+	}
+	
+	
+	//display editing page with preloaded info for values in <input>
+	public function actionEdit()
+	{
+		$id = $_GET['id'];
+		
+		$view = new Views();
+		$view->one_news = NewsModel::findOneByPk($id);
+		$view->display('news/edit.php');
+	}
+	
+	public function actionSave()
+	{
+		if (isset($_POST) && !empty($_POST)) {
+			$news = new NewsController();
+			$news->actionUpdate();
+		}
+		elseif (!isset($_POST) || empty($_POST)) {
+			$news = new NewsController();
+			$news->actionDelete();
+		}
+		else {
+			session_start();
+			$_SESSION['message'] = 'Wrong operation';
+			$view = new Views();
+			$view->display('news/message.php');
+		}
 	}
 }

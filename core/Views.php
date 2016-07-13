@@ -41,7 +41,7 @@ class Views
 	}
 
 
-	//display content rendering before
+	//display content that was rendering before
 	public function display($filename)
 	{
 		echo $this->render($filename);

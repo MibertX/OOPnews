@@ -69,7 +69,7 @@ abstract class AdminModel
 
 		$data = [];
 		foreach ($cols as $col) {
-			$data[':' . $col] =  $this->data[$col];    //the same as array $cols, "кроме" that before keys is ':'
+			$data[':' . $col] =  $this->data[$col];    //the same as array $cols, except that before keys is ':'
 		}
 
 		$sql = '
@@ -96,15 +96,18 @@ abstract class AdminModel
 		$updates_keys = array_keys($updates);
 
 		foreach($updates_keys as $property) {
-			if ($current_news->data[$property] == $updates[$property]) {
+			if ($current_news->data[$property] == $updates[$property]) {    //no need to resave the same data
 				continue;
 			}
-			$params[':' . $property] =  $updates[$property];
+			elseif (empty($updates[$property])) {    //don't save an empty property
+				continue;
+			}
+				
+			$params[':' . $property] = $updates[$property];
 			$ins[] = $property . " =:" . $property;
 		}
 
 		if (!isset($ins) or empty($ins)) {    //if true - there is no need in sql query
-			echo'false';//test'
 			return false;
 		}
 
