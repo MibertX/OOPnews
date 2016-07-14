@@ -4,9 +4,9 @@
  * User: Mibert
  * Date: 13.07.2016
  * Time: 0:28
- */
+*/
 ?>
-<form action="/index.php?ctrl=news&action=save&id=<?php echo $one_news->id?>"
+<form action="/index.php?ctrl=news&action=save&id=<?php echo $one_news->id ?>"
 	  method="post" enctype="multipart/form-data">
 
 	<label>

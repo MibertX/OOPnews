@@ -67,21 +67,27 @@ abstract class AdminModel
 	{
 		$cols = array_keys($this->data);    //get an array of keys, which belong another array  ($this->data)
 
-		$data = [];
-		foreach ($cols as $col) {
-			$data[':' . $col] =  $this->data[$col];    //the same as array $cols, except that before keys is ':'
+		$params = [];
+		foreach ($this->data as $key => $value) {
+			$params[':' . $key] = $value;    //the same as array $this->data, except that before keys is a symbol ':'
 		}
 
 		$sql = '
 			INSERT INTO ' . static::$table . '
 			(' . implode(', ', $cols) . ')
 			VALUES
-			(' . implode(', ', array_keys($data)) . ')
+			(' . implode(', ', array_keys($params)) . ')    /* the same as :$cols */    
 		';
 
 		$db = new DB();
 		$db->setClassName(get_called_class());    //The name of every classModel that extend this AdminModel
-		return $db->exec($sql, $data);
+		$result = $db->exec($sql, $params);
+
+		if (true === $result) {
+			$this->id = $db->lastInsertId();
+		}
+
+		return $result;
 	}
 
 

@@ -42,4 +42,11 @@ class DB
 		$sth = $this->dbn->prepare($sql);
 		return $sth->execute($params);
 	}
+
+
+	//returning id of the last inserted object
+	public function lastInsertId()
+	{
+		return $this->dbh->lastInsertId();
+	}
 }

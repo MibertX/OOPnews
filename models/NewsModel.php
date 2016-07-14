@@ -18,27 +18,27 @@ class NewsModel extends AdminModel
 //	public $title;
 
 	//inserting data into DB
-	public static function insertOne($array_data)
-	{
-		$db = new DB;
-
-		$sql = "
-			INSERT INTO " . static::$table .
-			    "(source, date, title, text)
-			VALUES
-			    ('" . $array_data['source'] ."',
-			    	'". $array_data['date'] . "',
-			    	'" . $array_data['title'] . "',
-			        '" . $array_data['text'] ."')";
-
-		return $db->exec($sql);
-	}
-
-	//delete data from DB
-	public static function deleteOne($id)
-	{
-		$db = new DB();
-		$sql = 'DELETE * FROM ' . static::$table . 'WHERE id=' . $id;
-		return $db->exec($sql);
-	}
+//	public static function insertOne($array_data)
+//	{
+//		$db = new DB;
+//
+//		$sql = "
+//			INSERT INTO " . static::$table .
+//			    "(source, date, title, text)
+//			VALUES
+//			    ('" . $array_data['source'] ."',
+//			    	'". $array_data['date'] . "',
+//			    	'" . $array_data['title'] . "',
+//			        '" . $array_data['text'] ."')";
+//
+//		return $db->exec($sql);
+//	}
+//
+//	//delete data from DB
+//	public static function deleteOne($id)
+//	{
+//		$db = new DB();
+//		$sql = 'DELETE * FROM ' . static::$table . ' WHERE id=' . $id;
+//		return $db->exec($sql);
+//	}
 }
