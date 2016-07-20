@@ -14,55 +14,78 @@ class NewsController
 	{
 		$view = new Views();
 		$view->news = NewsModel::findAll();    //get an array of objects-news
-		$view->display('news/all.php');        //and display them
+		$view->display('news' . DS .'all.php');        //and display them
 	}
 
 
 	//display one news got by id from DB
 	public function actionOne()
 	{
+		if (empty($_GET['id'])) {
+			throw new PageNotFoundException;
+		}
+
 		$id = $_GET['id'];
+		
 		$view = new Views();
-		$view->one_news = NewsModel::findOneByPk($id);
-		$view->display('news/one.php');
+	    $view->one_news = NewsModel::findOneByPk($id);
+		
+		$view->display('news' . DS .'one.php');
 	}
 
 
 	//display one news got by column from DB
 	public function actionOneByColumn()
 	{
-		//without view now, its for search
-		//$id = $_GET['id'];
-
-		$field = 'source';    //_GET
-		$value = 'Mibert';    //_GET
+		$field = $_GET['field'];    //_GET for test, later - POST
+		$value = $_GET['value'];    //_GET for test, later - POST
 		$article = new NewsModel();
 		$result = $article->findByColumn($field, $value);
 
 		$view = new Views();
-		if ($result === true) {
-			$view->one_news = $result;
-			$view->display('news/one.php');
+		if (!empty($result)) {
+			$view->news = $result;
+			$view->display('news' . DS .'all.php');
 		}
 		else {
 			session_start();
 			$_SESSION['message'] = 'No search result';
-			$view->display('news/message.php');
+			$view->display('news' . DS . 'message.php');
 		}
 	}
 
 
-	//insert new article into
+	//insert new article into DB
 	private function actionInsert()
 	{
+		//if html <require> does not work
+		if (empty($_POST['title']) || empty($_POST['text']))
+		{
+			$_SESSION['message'] = 'You must enter title and text before';
+			$view = new Views();
+			$view->display('news'. DS .'message.php');
+			exit;
+		}
+
+		//No need to publish another the same news
+		if(!empty(NewsModel::findByColumn('title', $_POST['title'])) ||
+			!empty(NewsModel::findByColumn('text', $_POST['text'])))
+		{
+			$_SESSION['message'] = 'News with the same title or text already published';
+			$view = new Views();
+			$view->display('news'. DS .'message.php');
+			exit;
+		}
+
+		//if all checks succeed - create object article with entered by user data and insert it into database
 		$article = new NewsModel();
 		$article->title = $_POST['title'];
 		$article->text = $_POST['text'];
 		$article->source = 'PDO Mibert';    //will be update when reg. and auth. will be working
 		$article->date = date('Y.m.d.');
+
 		$result = $article->insert();
 
-		session_start();
 		if ($result === false) {
 			$_SESSION['message'] = 'Cannot insert the news';
 		}
@@ -75,6 +98,10 @@ class NewsController
 	//update the news
 	private function actionUpdate()
 	{
+		if (empty($_GET['id'])) {
+			throw new PageNotFoundException;
+		}
+
 		$news = new NewsModel();
 		$news->id = $_GET['id'];
 		$news->title = $_POST['title'];
@@ -96,6 +123,10 @@ class NewsController
 	//delete the news
 	public function actionDelete()
 	{
+		if (empty($_GET['id'])) {
+			throw new PageNotFoundException;
+		}
+
 		$news = new NewsModel();
 		$news->id = $_GET['id'];
 
@@ -110,18 +141,22 @@ class NewsController
 		}
 
 		$view = new Views();
-		$view->display('news/message.php');
+		$view->display('news'. DS .'message.php');
 	}
 	
 	
 	//display editing page with preloaded info for values in <input>
 	public function actionEdit()
 	{
+		if (empty($_GET['id'])) {
+			throw new PageNotFoundException;
+		}
+
 		$id = $_GET['id'];
 		
 		$view = new Views();
 		$view->one_news = NewsModel::findOneByPk($id);
-		$view->display('news/edit.php');
+		$view->display('news'. DS .'edit.php');
 	}
 
 
@@ -138,6 +173,6 @@ class NewsController
 		}
 
 		$view = new Views();
-		$view->display('news/message.php');
+		$view->display('news'. DS .'message.php');
 	}
 }

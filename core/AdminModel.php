@@ -23,17 +23,37 @@ abstract class AdminModel
 	{
 		return $this->data[$key];
 	}
+	public function __isset($key)
+	{
+		return isset($this->data['key']);
+	}
+
+
+	//Check for existing file
+	protected static function existenceCheckByPk($id)
+	{
+		$sql = 'SELECT id FROM ' . static::$table . ' WHERE id=:id';
+
+		$db = new DB();
+		return $db->query($sql, [':id' => $id])[0];    //returning only first element of the array
+	}
 
 
 	//Get all elements from DB
 	public static function findAll()
 	{
-		$sql = 'SELECT * FROM ' . static::$table;
+		$sql = 'SELECT * FROM ' . static::$table . ' ORDER by id DESC';
 
 		$db = new DB();
 		$db->setClassName(get_called_class());
+		$result = $db->query($sql);    //an array of object or false
 
-		return $db->query($sql);    //returning an array of object or false
+		//generating an exception if true
+		if (empty($result)) {
+			throw new PageNotFoundException;
+		}
+
+		return $result;
 	}
 
 
@@ -44,21 +64,26 @@ abstract class AdminModel
 
 		$db = new DB();
 		$db->setClassName(get_called_class());
+		$result = $db->query($sql, [':id' => $id])[0];
 
-		return $db->query($sql, [':id' => $id])[0];    //returning only first element of the array
+		//generating an exception if true
+		if (empty($result)) {
+			throw new PageNotFoundException();
+		}
+
+		return $result;    //returning only first element of the array
 	}
 
 
-	//Get one element by column
+	//Get one element by column    (need to update - return message if empty, and return not only one object)
 	public static function findByColumn($field, $value)
 	{
 		$sql = 'SELECT * FROM ' . static::$table . ' WHERE ' . $field .'=:' . $field;
-		var_dump($sql);
 
 		$db = new DB();
 		$db->setClassName(get_called_class());
 
-		return $db->query($sql, [':'. $field => $value]);    // returning only first element of the array
+		return $db->query($sql, [':'. $field => $value]);
 	}
 
 
@@ -94,6 +119,12 @@ abstract class AdminModel
 	//updating the element
 	public function update()
 	{
+		//Can not update data that is not exists
+		$existence_check = $this->existenceCheckByPk($this->id);
+		if (empty($existence_check)) {    //if true - generate an exception (404 error)
+			throw new PageNotFoundException;
+		}
+
 		$current_news = static::findOneByPk($this->id);    //get the element that need to be updated
 
 		$params = [];    //array with parameters for making sql query
@@ -133,7 +164,13 @@ abstract class AdminModel
 	//delete the element
 	public function delete()
 	{
-		$sql = ' DELETE FROM ' . static::$table . ' WHERE id=:id';
+		//No need to delete data that is not exists
+		$existence_check = $this->existenceCheckByPk($this->id);
+		if (empty($existence_check)) {
+			throw new PageNotFoundException;
+		}
+
+		$sql = 'DELETE FROM ' . static::$table . ' WHERE id=:id';
 
 		$db = new DB;
 		$db->setClassName(get_called_class());

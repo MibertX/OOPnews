@@ -22,5 +22,8 @@ function __autoload ($class)
 
 	} elseif (file_exists(__DIR__ . DS . 'core' . DS . $class . '.php')) {
 		require __DIR__ . DS . 'core' . DS . $class . '.php';
+
+	} elseif (file_exists(__DIR__ . DS . 'exeptions' . DS . $class . '.php')) {
+		require __DIR__ . DS . 'exeptions' . DS . $class . '.php';
 	}
 }
