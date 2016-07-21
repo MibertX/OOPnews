@@ -6,4 +6,5 @@
  * Time: 19:34
  */
 
+ini_set('default_charset','UTF-8');
 define('DS', DIRECTORY_SEPARATOR);

@@ -24,7 +24,7 @@ class DB
 			$this->dbn = new PDO($dsn, 'root', '', $opt);
 		}
 		catch (PDOException $e) {    //throw exception if can not connect to DB
-			throw new DbConnectException(null, null, $e);
+			throw new DbConnectException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
 

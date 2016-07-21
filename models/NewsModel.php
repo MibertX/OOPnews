@@ -7,38 +7,19 @@
  * Time: 19:02
  */
 
-class NewsModel extends AdminModel
+class NewsModel
+	extends AdminModel
 {
 	protected static $table = 'news';
 	protected static $class = 'NewsModel';
 
-//	public $source;
-//	public $text;
-//	public $date;
-//	public $title;
 
-	//inserting data into DB
-//	public static function insertOne($array_data)
+//	//check the existance of news by title and text
+//	public function existenceNewsCheck()
 //	{
-//		$db = new DB;
+//		$sql = 'SELECT id FROM ' . static::$table . ' WHERE title=:title OR text=:text';
 //
-//		$sql = "
-//			INSERT INTO " . static::$table .
-//			    "(source, date, title, text)
-//			VALUES
-//			    ('" . $array_data['source'] ."',
-//			    	'". $array_data['date'] . "',
-//			    	'" . $array_data['title'] . "',
-//			        '" . $array_data['text'] ."')";
-//
-//		return $db->exec($sql);
-//	}
-//
-//	//delete data from DB
-//	public static function deleteOne($id)
-//	{
 //		$db = new DB();
-//		$sql = 'DELETE * FROM ' . static::$table . ' WHERE id=' . $id;
-//		return $db->exec($sql);
+//		return $db->query($sql, [':title' => $this->title, ':text' =>$this->text]);
 //	}
 }

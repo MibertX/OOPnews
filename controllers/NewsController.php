@@ -68,8 +68,8 @@ class NewsController
 		}
 
 		//No need to publish another the same news
-		if(!empty(NewsModel::findByColumn('title', $_POST['title'])) ||
-			!empty(NewsModel::findByColumn('text', $_POST['text'])))
+		if(!empty(NewsModel::existenceCheckByColumn('title', $_POST['title'])) ||
+			!empty(NewsModel::existenceCheckByColumn('text', $_POST['text'])))
 		{
 			$_SESSION['message'] = 'News with the same title or text already published';
 			$view = new Views();
@@ -174,5 +174,13 @@ class NewsController
 
 		$view = new Views();
 		$view->display('news'. DS .'message.php');
+	}
+	
+	
+	public function actionViewLog()
+	{
+		$view = new Views();
+		$view->logs = explode('|#|', file_get_contents(__DIR__  . DS . '..' . DS . 'log.txt'));
+		$view->display('news'. DS .'viewLog.php');
 	}
 }

@@ -6,6 +6,8 @@
  * Time: 21:59
  */
 
+include __DIR__ . DS . 'viewLog_button.php';
+
 include __DIR__ . DS . 'add.php';
 
 foreach ($news as $article) : ?>
