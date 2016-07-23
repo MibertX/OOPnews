@@ -7,15 +7,14 @@
  */
 
 include __DIR__ . DS . 'viewLog_button.php';
-
 include __DIR__ . DS . 'add.php';
 
-foreach ($news as $article) : ?>
+foreach ($news as $article) : ?>    <!-- $news is an array of objects -->
 	<h2>
-		<a href="../../index.php?ctrl=News&action=One&id=<?php echo $article->id ?>"> <?php echo $article->title ?> </a>
+		<a href="/News/One/<?php echo $article->id ?>"> <?php echo $article->title ?> </a>
 	</h2>
 
-	<?php include __DIR__ . DS . 'control_buttons.php' ?>
+	<?php include __DIR__ . DS . 'control_buttons.php' ?>    <!-- Edit and delete buttons -->
 
 	<p>
 		<?php echo $article->text ?>

@@ -6,17 +6,19 @@
  * Time: 0:28
 */
 ?>
-<form action="/index.php?ctrl=news&action=save&id=<?php echo $one_news->id ?>"
-	  method="post" enctype="multipart/form-data">
+<form action="/news/save/<?php echo $article->id ?>" method="post" enctype="multipart/form-data">
+
+<!-- values in title and text is preloaded from edited article -->
+	<label>
+		<input type="text" name="title" id="title" value="<?php echo $article->title ?>" >
+	</label>
+	<br><br>
 
 	<label>
-		<input type="text" name="title" id="title" value="<?php echo $one_news->title ?>" >
+		<textarea name="text" id="text" ><?php echo $article->text ?></textarea>
 	</label>
 	<br><br>
-	<label>
-		<textarea name="text" id="text" ><?php echo $one_news->text ?></textarea>
-	</label>
-	<br><br>
+
 	<input type="submit">
 </form>
 

@@ -8,11 +8,11 @@
 ?>
 
 <h2>
-    <?php echo $one_news->title ?>
+    <?php echo $article->title ?>
 </h2>
 
-<a href="/index.php?ctrl=news&action=edit&id=<?php echo $one_news->id ?>"> Edit </a>
+<?php include __DIR__ . DS . 'control_buttons.php' ?>    <!-- Edit and delete buttons -->
 
 <p>
-	<?php echo $one_news->text ?>
+	<?php echo $article->text ?>
 </p>

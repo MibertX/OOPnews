@@ -7,4 +7,4 @@
  */
 ?>
 
-<a href="http://oopnews/index.php?ctrl=News&action=ViewLog"> View logs </a>
+<a href="/news/viewlog"> View logs </a>

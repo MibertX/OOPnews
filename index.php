@@ -4,22 +4,24 @@
 require __DIR__ . DIRECTORY_SEPARATOR .  'config.php';
 require_once __DIR__ . DS . 'autoload.php';
 
-$ctrl = isset($_GET['ctrl']) ? $_GET['ctrl'] : 'News';
-$act = isset($_GET['action']) ? $_GET['action'] : 'All';
+$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$pathPart = explode('/', $path);
 
-$ctrl = $ctrl . 'Controller';
-$method = 'action' . $act;
+$ctrl = !empty($pathPart[1]) ? ucfirst($pathPart[1]) : 'News';
+$act = !empty($pathPart[2]) ? ucfirst($pathPart[2]) : 'All';
+$id = !empty($pathPart[3]) ? ucfirst($pathPart[3]) : null;
 
-if (!file_exists(__DIR__ . DS . 'controllers' . DS . $ctrl . '.php')) {
-	throw new PageNotFoundException;
-}
-$controller = new $ctrl;
-
-if (!method_exists($controller, $method)) {
-	throw new PageNotFoundException;
-}
+$_GET['id'] = $pathPart[3];
 
 try {
+	$ctrl = $ctrl . 'Controller';
+	$method = 'action' . $act;
+
+	if (!file_exists(__DIR__ . DS . 'controllers' . DS . $ctrl . '.php') || !method_exists($ctrl, $method)) {
+		throw new PageNotFoundException;
+	}
+
+	$controller = new $ctrl;
 	$controller->$method();
 }
 catch (Exception $e) {

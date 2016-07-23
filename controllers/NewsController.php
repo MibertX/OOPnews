@@ -28,7 +28,7 @@ class NewsController
 		$id = $_GET['id'];
 		
 		$view = new Views();
-	    $view->one_news = NewsModel::findOneByPk($id);
+	    $view->article = NewsModel::findOneByPk($id);
 		
 		$view->display('news' . DS .'one.php');
 	}
@@ -102,13 +102,13 @@ class NewsController
 			throw new PageNotFoundException;
 		}
 
-		$news = new NewsModel();
-		$news->id = $_GET['id'];
-		$news->title = $_POST['title'];
-		$news->text = $_POST['text'];
-		$news->date = date('Ymd');
+		$article = new NewsModel();
+		$article->id = $_GET['id'];
+		$article->title = $_POST['title'];
+		$article->text = $_POST['text'];
+		$article->date = date('Ymd');
 
-		$result = $news->update();
+		$result = $article->update();
 
 		session_start();
 		if ($result === false) {
@@ -127,10 +127,10 @@ class NewsController
 			throw new PageNotFoundException;
 		}
 
-		$news = new NewsModel();
-		$news->id = $_GET['id'];
+		$article = new NewsModel();
+		$article->id = $_GET['id'];
 
-		$result = $news->delete();
+		$result = $article->delete();
 
 		session_start();
 		if ($result === false) {
@@ -155,7 +155,7 @@ class NewsController
 		$id = $_GET['id'];
 		
 		$view = new Views();
-		$view->one_news = NewsModel::findOneByPk($id);
+		$view->article = NewsModel::findOneByPk($id);
 		$view->display('news'. DS .'edit.php');
 	}
 

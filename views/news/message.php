@@ -14,7 +14,7 @@ if (!isset($_SESSION['message']) or empty($_SESSION['message'])) {
 <h3> <?php echo $_SESSION['message'] ?> </h3>
 <?php unset($_SESSION['message']) ?>
 
-<a href="http://oopnews/index.php?ctrl=news&action=All"> Back to main page </a>
+<a href="/news/all"> Back to main page </a>
 
 
 
