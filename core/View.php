@@ -6,12 +6,22 @@
  * Date: 05.07.2016
  * Time: 22:08
  */
-class Views
+
+namespace Aplication\Core;
+
+/**
+ * Class View
+ * @package Aplication\Core
+ * @property $news
+ * @property $article
+ * @property $logs
+ */
+
+class View
 {
 	const PATH = __DIR__ . DS . '..' . DS . 'views' . DS;
 
 	protected $file;
-//	public $head_title;
 	protected $data=[];
 
 
@@ -23,6 +33,10 @@ class Views
 	public function __get($key)
 	{
 		return $this->data[$key];
+	}
+	public function __isset($key)
+	{
+		return isset($this->data[$key]);
 	}
 
 

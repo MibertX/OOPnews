@@ -8,22 +8,13 @@
 
 function __autoload ($class)
 {
-	if (file_exists(__DIR__ . DS . 'controllers' . DS . $class . '.php')) {
-		require __DIR__ . DS . 'controllers' . DS . $class . '.php';
+	$classParts = explode('\\', $class);
+	$classParts[0] = __DIR__;    //Aplication
+	$path = implode(DIRECTORY_SEPARATOR, $classParts) . '.php';    //DS - is a DIRECTORY_SEPARATOR (congig.php)
 
-	} elseif (file_exists(__DIR__ . DS . 'models' . DS . $class . '.php')) {
-		require __DIR__ . DS . 'models' . DS . $class . '.php';
-
-	} elseif (file_exists(__DIR__ . DS . 'classes' . DS . $class . '.php')) {
-		require __DIR__ . DS . 'classes' . DS . $class . '.php';
-
- 	} elseif (file_exists(__DIR__ . DS . 'views' . DS . $class . '.php')) {
-		require __DIR__ . DS . 'views' . DS . $class . '.php';
-
-	} elseif (file_exists(__DIR__ . DS . 'core' . DS . $class . '.php')) {
-		require __DIR__ . DS . 'core' . DS . $class . '.php';
-
-	} elseif (file_exists(__DIR__ . DS . 'exeptions' . DS . $class . '.php')) {
-		require __DIR__ . DS . 'exeptions' . DS . $class . '.php';
+	if (file_exists($path)) {
+		require $path;
+	}else {
+		throw new Aplication\Exceptions\PageNotFound;
 	}
 }

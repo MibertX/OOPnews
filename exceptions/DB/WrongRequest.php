@@ -6,8 +6,12 @@
  * Date: 19.07.2016
  * Time: 22:15
  */
-class DbWrongRequestException
-	extends DBException
+
+namespace Aplication\Exceptions\DB;
+use Exception;
+
+class WrongRequest
+	extends Exception
 {
 
 }

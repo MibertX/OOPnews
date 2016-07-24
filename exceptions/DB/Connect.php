@@ -6,8 +6,12 @@
  * Date: 17.07.2016
  * Time: 21:53
  */
-class DbConnectException
-	extends DBException
+
+namespace Aplication\Exceptions\Db;
+use Exception;
+
+class Connect
+	extends Exception
 {
 
 }

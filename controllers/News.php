@@ -7,12 +7,17 @@
  * Time: 9:24
  */
 
-class NewsController
+namespace Aplication\Controllers;
+use Aplication\Models\News as NewsModel;
+use Aplication\Core\View;
+use Aplication\Exceptions\PageNotFound;
+
+class News
 {
 	//display all news
     public function actionAll()
 	{
-		$view = new Views();
+		$view = new View();
 		$view->news = NewsModel::findAll();    //get an array of objects-news
 		$view->display('news' . DS .'all.php');        //and display them
 	}
@@ -22,12 +27,12 @@ class NewsController
 	public function actionOne()
 	{
 		if (empty($_GET['id'])) {
-			throw new PageNotFoundException;
+			throw new PageNotFound;
 		}
 
 		$id = $_GET['id'];
 		
-		$view = new Views();
+		$view = new View();
 	    $view->article = NewsModel::findOneByPk($id);
 		
 		$view->display('news' . DS .'one.php');
@@ -42,7 +47,7 @@ class NewsController
 		$article = new NewsModel();
 		$result = $article->findByColumn($field, $value);
 
-		$view = new Views();
+		$view = new View();
 		if (!empty($result)) {
 			$view->news = $result;
 			$view->display('news' . DS .'all.php');
@@ -62,7 +67,7 @@ class NewsController
 		if (empty($_POST['title']) || empty($_POST['text']))
 		{
 			$_SESSION['message'] = 'You must enter title and text before';
-			$view = new Views();
+			$view = new View();
 			$view->display('news'. DS .'message.php');
 			exit;
 		}
@@ -72,7 +77,7 @@ class NewsController
 			!empty(NewsModel::existenceCheckByColumn('text', $_POST['text'])))
 		{
 			$_SESSION['message'] = 'News with the same title or text already published';
-			$view = new Views();
+			$view = new View();
 			$view->display('news'. DS .'message.php');
 			exit;
 		}
@@ -99,7 +104,7 @@ class NewsController
 	private function actionUpdate()
 	{
 		if (empty($_GET['id'])) {
-			throw new PageNotFoundException;
+			throw new PageNotFound;
 		}
 
 		$article = new NewsModel();
@@ -124,7 +129,7 @@ class NewsController
 	public function actionDelete()
 	{
 		if (empty($_GET['id'])) {
-			throw new PageNotFoundException;
+			throw new PageNotFound;
 		}
 
 		$article = new NewsModel();
@@ -140,7 +145,7 @@ class NewsController
 			$_SESSION['message'] = 'Deleting was success';
 		}
 
-		$view = new Views();
+		$view = new View();
 		$view->display('news'. DS .'message.php');
 	}
 	
@@ -149,12 +154,12 @@ class NewsController
 	public function actionEdit()
 	{
 		if (empty($_GET['id'])) {
-			throw new PageNotFoundException;
+			throw new PageNotFound;
 		}
 
 		$id = $_GET['id'];
 		
-		$view = new Views();
+		$view = new View();
 		$view->article = NewsModel::findOneByPk($id);
 		$view->display('news'. DS .'edit.php');
 	}
@@ -163,7 +168,7 @@ class NewsController
 	//public method that decide - is a news a new one - and insert it, or a news is exist - so only update it
 	public function actionSave()
 	{
-		$news = new NewsController();
+		$news = new News();
 
 		if (isset($_GET['id'])) {
 			$news->actionUpdate();
@@ -172,14 +177,14 @@ class NewsController
 			$news->actionInsert();
 		}
 
-		$view = new Views();
+		$view = new View();
 		$view->display('news'. DS .'message.php');
 	}
 	
 	
 	public function actionViewLog()
 	{
-		$view = new Views();
+		$view = new View();
 		$view->logs = explode('|#|', file_get_contents(__DIR__  . DS . '..' . DS . 'log.txt'));
 		$view->display('news'. DS .'viewLog.php');
 	}

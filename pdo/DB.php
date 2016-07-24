@@ -6,6 +6,15 @@
  * Date: 04.07.2016
  * Time: 15:23
  */
+
+namespace Aplication\PDO;
+use Aplication\Exceptions\DB\Connect;
+use Aplication\Exceptions\DB\WrongRequest;
+
+//Integrated PHP classes
+use PDO;
+use PDOException;
+
 class DB
 {
 	protected $dbn;
@@ -24,7 +33,7 @@ class DB
 			$this->dbn = new PDO($dsn, 'root', '', $opt);
 		}
 		catch (PDOException $e) {    //throw exception if can not connect to DB
-			throw new DbConnectException($e->getMessage(), $e->getCode(), $e);
+			throw new Connect($e->getMessage(), $e->getCode(), $e);
 		}
 	}
 
@@ -46,7 +55,7 @@ class DB
 			return $sth->fetchAll(PDO::FETCH_CLASS, $this->className);
 		}
 		catch (PDOException $e) {
-			throw new DbWrongRequestException(null, null, $e);
+			throw new WrongRequest(null, null, $e);
 		}
 	}
 
@@ -60,7 +69,7 @@ class DB
 			return $sth->execute($params);
 		} 
 		catch (PDOException $e) {
-			throw new DbWrongRequestException(null, null, $e);
+			throw new WrongRequest(null, null, $e);
 		}
 	}
 

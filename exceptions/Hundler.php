@@ -6,30 +6,35 @@
  * Time: 21:42
  */
 
-class ExceptHundler
+namespace Aplication\Exceptions;
+
+class Hundler
 {
 	protected $message;
 	protected $code;
 	protected $caught_except;
 
-
 	public function __construct($e)
 	{
 		$this->caught_except = $e;
 		
-		//select message and code of error to show them user
-		switch (get_class($this->caught_except)) {
-			case ('DbConnectException'):
+		//need to get a classname without namespaces, only filename of the class
+		$exceptParts = explode('\\', get_class($e));
+		$except_class = array_pop($exceptParts);    //the last element of exceptParts is the exception's filename
+		
+		//select message and code of error to show them user, cases is the filename of exception
+		switch ($except_class) {
+			case ('Connect'):
 				$this->message = 'Can not connect to database.';
 				$this->code = 403;
 				break;
 
-			case('DbWrongRequestException'):
+			case('WrongRequest'):
 				$this->message = 'Some database error. Sorry, try please later';
 				$this->code = 403;
 				break;
 
-			case ('PageNotFoundException'):
+			case('PageNotFound'):
 				$this->message = 'Page not found. Maybe it was deleted.';
 				$this->code = 404;
 				break;
@@ -67,7 +72,7 @@ class ExceptHundler
 		$log_data['line'] = $this->caught_except->getLine();
 		$log_data['trace'] = $this->caught_except->getTraceAsString();
 
-		//need to save an original error code and message(for example - PDOExcaption) if it exists
+		//need to save an original error code and message(for example - PDOException) if it exists
 		if (!empty($this->caught_except->getCode())) {
 			$log_data['code'] = $this->caught_except->getCode();
 		}else {

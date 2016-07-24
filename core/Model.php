@@ -7,7 +7,12 @@
  * Time: 19:05
  */
 
-abstract class AdminModel
+namespace Aplication\Core;
+use Aplication\PDO\DB;
+use Aplication\Exceptions\PageNotFound;
+
+
+abstract class Model
 {
 	protected static $table;
 	protected static $class;
@@ -25,7 +30,7 @@ abstract class AdminModel
 	}
 	public function __isset($key)
 	{
-		return isset($this->data['key']);
+		return isset($this->data[$key]);
 	}
 
 
@@ -60,7 +65,7 @@ abstract class AdminModel
 
 		//generating an exception if true
 		if (empty($result)) {
-			throw new PageNotFoundException;
+			throw new PageNotFound;
 		}
 
 		return $result;
@@ -78,7 +83,7 @@ abstract class AdminModel
 
 		//generating an exception if true
 		if (empty($result)) {
-			throw new PageNotFoundException();
+			throw new PageNotFound;
 		}
 
 		return $result;    //returning only first element of the array
@@ -130,9 +135,9 @@ abstract class AdminModel
 	public function update()
 	{
 		//Can not update data that is not exists
-		$existence_check = $this->existenceCheckByColumn($this->id);
+		$existence_check = $this->existenceCheckByPk($this->id);
 		if (empty($existence_check)) {    //if true - generate an exception (404 error)
-			throw new PageNotFoundException;
+			throw new PageNotFound;
 		}
 
 		$current_news = static::findOneByPk($this->id);    //get the element that need to be updated
@@ -177,7 +182,7 @@ abstract class AdminModel
 		//No need to delete data that is not exists
 		$existence_check = $this->existenceCheckByPk($this->id);
 		if (empty($existence_check)) {
-			throw new PageNotFoundException;
+			throw new PageNotFound;
 		}
 
 		$sql = 'DELETE FROM ' . static::$table . ' WHERE id=:id';

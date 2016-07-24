@@ -6,8 +6,12 @@
  * Date: 17.07.2016
  * Time: 22:13
  */
-class PageNotFoundException
-	extends ModelException
+
+namespace Aplication\Exceptions;
+use Exception;
+
+class PageNotFound
+	extends Exception
 {
 
 }
