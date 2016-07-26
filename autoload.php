@@ -6,10 +6,10 @@
  * Time: 1:33
  */
 
-function __autoload ($class)
+function autoload ($class)
 {
 	$classParts = explode('\\', $class);
-	$classParts[0] = __DIR__;    //Aplication
+	$classParts[0] = __DIR__;    //Aplication = __DIR__
 	$path = implode(DIRECTORY_SEPARATOR, $classParts) . '.php';    //DS - is a DIRECTORY_SEPARATOR (congig.php)
 
 	if (file_exists($path)) {
@@ -18,3 +18,11 @@ function __autoload ($class)
 		throw new Aplication\Exceptions\PageNotFound;
 	}
 }
+
+require __DIR__ . DS . 'vendor' . DS . 'autoload.php';
+spl_autoload_extensions(".php");
+spl_autoload_register('autoload', $throw = true);
+
+
+
+
