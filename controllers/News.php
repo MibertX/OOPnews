@@ -11,6 +11,8 @@ namespace Aplication\Controllers;
 use Aplication\Models\News as NewsModel;
 use Aplication\Core\View;
 use Aplication\Exceptions\PageNotFound;
+use Aplication\Models\PHPMailer_MyOwn;
+
 
 class News
 {
@@ -95,6 +97,16 @@ class News
 			$_SESSION['message'] = 'Cannot insert the news';
 		}
 		else {
+			$mail = new PHPMailer_MyOwn();
+			$mail->configuration();
+			$mail->Subject = 'News added';
+			$mail->Body = 'New artocle was added';
+			$mail->addAddress('Razo412@gmail.com', 'Mibert');
+
+			if (!$mail->send()) {
+				echo 'pizdec';die;
+			}
+			
 			$_SESSION['message'] = 'Inserting was success';
 		}
 	}
