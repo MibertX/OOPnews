@@ -1,0 +1,16 @@
+{% include 'news/viewlog_button.html.twig' %}
+{% include 'news/add.html.twig' %}
+
+{% for article in news %}
+
+	<h2> <a href="/News/One/{{ article.id }}"> {{ article.title }} </a> </h2>
+
+	{% include 'news/control_buttons.html.twig' %}    <!-- Edit and delete buttons -->
+
+	<p> {{ article.text }} </p>
+	<br><br>
+
+{% else %}
+	<p> No news found </p>
+
+{% endfor %}

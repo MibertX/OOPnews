@@ -1,0 +1,12 @@
+{# Logs - array, each element is array too(log). #}
+{# Each element of arrays log is string, that need to display. #}
+{# Log number - a numeral key of array logs. #}
+
+{% for log_number, log in logs %}
+	<h5> Exception {{ log_number+1 }}</h5>
+	<p>
+		{% for log_str in log %}
+		<br>{{ log_str }}<br>
+		{% endfor %}
+	</p>
+{% endfor %}

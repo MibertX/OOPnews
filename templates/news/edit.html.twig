@@ -1,0 +1,17 @@
+<form action="/news/save/{{ article.id }}" method="post" enctype="multipart/form-data">
+
+<!-- values in title and text is preloaded from edited article -->
+	<label>
+		<input type="text" name="title" id="title" value="{{ article.title }}" >
+	</label>
+	<br><br>
+
+	<label>
+		<textarea name="text" id="text" >
+			{{ article.text }}
+		</textarea>
+	</label>
+	<br><br>
+
+	<input type="submit">
+</form>

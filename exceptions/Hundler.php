@@ -96,6 +96,6 @@ class Hundler
 			'Trace: ' . $log_data['trace'] . PHP_EOL;
 
 		//log an exception
-		file_put_contents ( __DIR__ . DS . '..' . DS . 'log.txt', $str . PHP_EOL, FILE_APPEND );
+		file_put_contents ( __DIR__ . DS . '..' . DS . 'log.txt', $str , FILE_APPEND );
 	}
 }

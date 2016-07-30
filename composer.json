@@ -1,3 +1,6 @@
 {"require":
-  {"phpmailer/phpmailer": "v6.0.0rc2"}
+  {
+    "phpmailer/phpmailer": "v6.0.0rc2",
+    "twig/twig": "v1.24.1"
+  }
 }

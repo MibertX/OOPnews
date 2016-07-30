@@ -1,7 +1,7 @@
 <?php
 //error_reporting(E_ALL);
 use Aplication\Exceptions\PageNotFound;
-use Aplication\Core\View;
+use Aplication\Core\View_Twig;
 use Aplication\Exceptions\Hundler;
 
 
@@ -34,8 +34,8 @@ catch (Exception $e) {
 	$custom_except = new Hundler($e);
 	if ('Aplication\Exceptions\PageNotFound' !== get_class($e)) { $custom_except->logExcept(); }
 
-	$view = new View();
+	$view = new View_Twig();
 	$view->error_code = $custom_except->getCustomExcaptCode();
 	$view->error_msg = $custom_except->getCustomExceptMessage();
-	$view->display('error.php');
+	$view->display('error');
 }

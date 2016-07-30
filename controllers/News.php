@@ -8,6 +8,7 @@
  */
 
 namespace Aplication\Controllers;
+use Aplication\Core\View_Twig;
 use Aplication\Models\News as NewsModel;
 use Aplication\Core\View;
 use Aplication\Exceptions\PageNotFound;
@@ -16,12 +17,26 @@ use Aplication\Models\PHPMailer_MyOwn;
 
 class News
 {
+	//session need in almost all methods for setting a message that need to show user
+	public function __construct()
+	{
+		session_start();
+	}
+
+
 	//display all news
     public function actionAll()
 	{
-		$view = new View();
-		$view->news = NewsModel::findAll();    //get an array of objects-news
-		$view->display('news' . DS .'all.php');        //and display them
+		$view = new View_Twig();
+		$view->news = NewsModel::findAll();
+
+		if (isset ($_SESSION['message'])) {
+			$view->message = $_SESSION['message'];
+			unset($_SESSION['message']);
+			session_destroy();
+		}
+
+		$view->display('news' . DS . 'all');die;
 	}
 
 
@@ -33,11 +48,10 @@ class News
 		}
 
 		$id = $_GET['id'];
-		
-		$view = new View();
+
+		$view = new View_Twig();
 	    $view->article = NewsModel::findOneByPk($id);
-		
-		$view->display('news' . DS .'one.php');
+		$view->display('news' . DS . 'one');
 	}
 
 
@@ -49,13 +63,12 @@ class News
 		$article = new NewsModel();
 		$result = $article->findByColumn($field, $value);
 
-		$view = new View();
+		$view = new View_Twig();
 		if (!empty($result)) {
 			$view->news = $result;
-			$view->display('news' . DS .'all.php');
+			$view->display('news' . DS . 'all');
 		}
 		else {
-			session_start();
 			$_SESSION['message'] = 'No search result';
 			$view->display('news' . DS . 'message.php');
 		}
@@ -79,8 +92,7 @@ class News
 			!empty(NewsModel::existenceCheckByColumn('text', $_POST['text'])))
 		{
 			$_SESSION['message'] = 'News with the same title or text already published';
-			$view = new View();
-			$view->display('news'. DS .'message.php');
+			header("Location: http://oopnews");
 			exit;
 		}
 
@@ -97,6 +109,8 @@ class News
 			$_SESSION['message'] = 'Cannot insert the news';
 		}
 		else {
+			$_SESSION['message'] = 'Inserting was success';
+
 			$mail = new PHPMailer_MyOwn();
 			$mail->configuration();
 			$mail->Subject = 'News added';
@@ -106,8 +120,6 @@ class News
 			if (!$mail->send()) {
 				echo 'pizdec';die;
 			}
-			
-			$_SESSION['message'] = 'Inserting was success';
 		}
 	}
 
@@ -127,7 +139,6 @@ class News
 
 		$result = $article->update();
 
-		session_start();
 		if ($result === false) {
 			$_SESSION['message'] = 'Cannot update the news';
 		}
@@ -149,7 +160,6 @@ class News
 
 		$result = $article->delete();
 
-		session_start();
 		if ($result === false) {
 			$_SESSION['message'] = 'Cannot delete the news';
 		}
@@ -157,8 +167,8 @@ class News
 			$_SESSION['message'] = 'Deleting was success';
 		}
 
-		$view = new View();
-		$view->display('news'. DS .'message.php');
+		header("Location: http://oopnews");
+		exit;
 	}
 	
 	
@@ -171,9 +181,9 @@ class News
 
 		$id = $_GET['id'];
 		
-		$view = new View();
+		$view = new View_Twig();
 		$view->article = NewsModel::findOneByPk($id);
-		$view->display('news'. DS .'edit.php');
+		$view->display('news'. DS .'edit');
 	}
 
 
@@ -189,15 +199,23 @@ class News
 			$news->actionInsert();
 		}
 
-		$view = new View();
-		$view->display('news'. DS .'message.php');
+		header("Location: http://oopnews");
+		exit;
 	}
 	
 	
 	public function actionViewLog()
 	{
-		$view = new View();
-		$view->logs = explode('|#|', file_get_contents(__DIR__  . DS . '..' . DS . 'log.txt'));
-		$view->display('news'. DS .'viewLog.php');
+		$logs = explode('|#|', file_get_contents(__DIR__  . DS . '..' . DS . 'log.txt'));
+		unset($logs[0]);
+
+		$logs_byString = [];
+		foreach ($logs as $log) {
+			$logs_byString[] = explode(PHP_EOL, $log);
+		}
+
+		$view = new View_Twig();
+		$view->logs = $logs_byString;
+		$view->display('news'. DS .'viewLog');
 	}
 }
