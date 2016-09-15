@@ -1,5 +1,5 @@
 <?php
-//error_reporting(E_ALL);
+
 use Aplication\Exceptions\PageNotFound;
 use Aplication\Core\View_Twig;
 use Aplication\Exceptions\Hundler;
@@ -8,6 +8,7 @@ use Aplication\Exceptions\Hundler;
 require __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
 require_once __DIR__ . DS . 'autoload.php';
 
+PHP_Timer::start();    //utility class for measuring the speed of the site
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $pathPart = explode('/', $path);
@@ -39,3 +40,7 @@ catch (Exception $e) {
 	$view->error_msg = $custom_except->getCustomExceptMessage();
 	$view->display('error');
 }
+
+//stop timer and show how fast site works
+$time = PHP_Timer::stop();
+echo PHP_Timer::secondsToTimeString($time);

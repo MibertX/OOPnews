@@ -1,6 +1,7 @@
 {"require":
   {
     "phpmailer/phpmailer": "v6.0.0rc2",
-    "twig/twig": "v1.24.1"
+    "twig/twig": "v1.24.1",
+    "phpunit/php-timer": "1.0.8"
   }
 }

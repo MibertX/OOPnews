@@ -8,9 +8,9 @@
  */
 
 namespace Aplication\Controllers;
-use Aplication\Core\View_Twig;
+
 use Aplication\Models\News as NewsModel;
-use Aplication\Core\View;
+use Aplication\Core\View_Twig;
 use Aplication\Exceptions\PageNotFound;
 use Aplication\Models\PHPMailer_MyOwn;
 
@@ -33,10 +33,9 @@ class News
 		if (isset ($_SESSION['message'])) {
 			$view->message = $_SESSION['message'];
 			unset($_SESSION['message']);
-			session_destroy();
 		}
 
-		$view->display('news' . DS . 'all');die;
+		$view->display('news' . DS . 'all');
 	}
 
 
@@ -82,8 +81,7 @@ class News
 		if (empty($_POST['title']) || empty($_POST['text']))
 		{
 			$_SESSION['message'] = 'You must enter title and text before';
-			$view = new View();
-			$view->display('news'. DS .'message.php');
+			header("Location: http://oopnews");
 			exit;
 		}
 

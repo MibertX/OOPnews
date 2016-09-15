@@ -19,9 +19,10 @@ function autoload ($class)
 	}
 }
 
-require __DIR__ . DS . 'vendor' . DS . 'autoload.php';
 spl_autoload_extensions(".php");
 spl_autoload_register('autoload', $throw = true);
+
+require __DIR__ . DS . 'vendor' . DS . 'autoload.php';
 
 
 
