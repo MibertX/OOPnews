@@ -1,4 +1,5 @@
 <?php
+//error_reporting(E_ALL);
 
 use Aplication\Exceptions\PageNotFound;
 use Aplication\Core\View_Twig;
